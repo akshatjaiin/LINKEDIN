@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analysis & Job Recommendations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .parent {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 15px;
+            height: 95vh;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .div1 {
+            grid-column: span 3;
+            grid-row: span 4;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .div2 {
+            grid-column: span 2;
+            grid-row: span 5;
+            grid-column-start: 4;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .div3 {
+            grid-column: span 3;
+            grid-row-start: 5;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .job-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-left-color: #764ba2;
+        }
+
+        .job-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .job-company {
+            color: #667eea;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .job-location {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .job-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .job-date {
+            background: #e8f4fd;
+            color: #3498db;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .job-site {
+            background: #f8f9fa;
+            color: #6c757d;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .site-linkedin { background: #0077b5; color: white; }
+        .site-indeed { background: #2557a7; color: white; }
+        .site-naukri { background: #ff6b35; color: white; }
+
+        .jobs-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .jobs-count {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .analysis-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roadmap-placeholder {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .roadmap-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+
+        .apply-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .apply-btn:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            transform: scale(1.05);
+            color: white;
+            text-decoration: none;
+        }
+
+        .no-jobs {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 40px 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        /* Custom scrollbar */
+        .div1::-webkit-scrollbar, .div2::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .div1::-webkit-scrollbar-track, .div2::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .div1::-webkit-scrollbar-thumb, .div2::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        .div1::-webkit-scrollbar-thumb:hover, .div2::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        @media (max-width: 768px) {
+            .parent {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                gap: 15px;
+                height: auto;
+            }
+            
+            .div1, .div2, .div3 {
+                grid-column: span 1;
+                grid-row: span 1;
+                grid-column-start: auto;
+                grid-row-start: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <!-- Div1: Resume Analysis Summary -->
+        <div class="div1">
+            <div class="section-title">
+                <i class="fas fa-brain"></i>
+                AI Resume Analysis
+            </div>
+            
+            {% if analysis %}
+                <div class="analysis-section">
+                    {{ analysis|linebreaks }}
+                </div>
+            {% else %}
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p class="mt-3">Analyzing your resume...</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Div2: Job Listings -->
+        <div class="div2">
+            <div class="jobs-header">
+                <i class="fas fa-briefcase"></i>
+                <div class="jobs-count">
+                    {% if jobs_data %}
+                        {{ jobs_data.total_jobs_found|default:0 }} Jobs Found
+                    {% else %}
+                        Job Recommendations
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="jobsContainer">
+                {% if jobs_data %}
+                    {% for job in jobs_data.jobs %}
+                        <div class="job-card" onclick="window.open('{{ job.job_url }}', '_blank')">
+                            <div class="job-title">{{ job.title }}</div>
+                            <div class="job-company">
+                                <i class="fas fa-building"></i> {{ job.company }}
+                            </div>
+                            <div class="job-location">
+                                <i class="fas fa-map-marker-alt"></i> {{ job.location }}
+                            </div>
+                            
+                            {% if job.salary != "N/A" %}
+                                <div class="job-salary">
+                                    <i class="fas fa-rupee-sign"></i> {{ job.salary }}
+                                </div>
+                            {% endif %}
+
+                            <div class="job-meta">
+                                <span class="job-site site-{{ job.site }}">{{ job.site|upper }}</span>
+                                {% if job.date_posted != "nan" and job.date_posted != "N/A" %}
+                                    <span class="job-date">{{ job.date_posted }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-3">
+                                <a href="{{ job.job_url }}" target="_blank" class="apply-btn" onclick="event.stopPropagation()">
+                                    <i class="fas fa-external-link-alt"></i> Apply Now
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% elif jobs_data %}
+                    <div class="no-jobs">
+                        <i class="fas fa-search fa-3x mb-3"></i>
+                        <p>No jobs found matching your criteria.</p>
+                        <small class="text-muted">Try adjusting your search parameters.</small>
+                    </div>
+                {% else %}
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p class="mt-3">Searching for jobs...</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Div3: Roadmap Generator (Locked) -->
+        <div class="div3">
+            <div class="roadmap-placeholder">
+                <i class="fas fa-lock roadmap-icon"></i>
+                <div>
+                    <strong>Roadmap Generator</strong>
+                    <br>
+                    <small>Coming Soon - Personalized learning paths to prepare for your target jobs</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to job cards
+            const jobCards = document.querySelectorAll('.job-card');
+            jobCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.borderLeftWidth = '6px';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.borderLeftWidth = '4px';
+                });
+            });
+
+            // Auto-refresh functionality (optional)
+            // You can add AJAX calls here to periodically update job listings
+        });
+
+        // Function to handle job application tracking
+        function trackJobApplication(jobTitle, company, site) {
+            // You can add analytics tracking here
+            console.log(`User clicked on: ${jobTitle} at ${company} via ${site}`);
+        }
+
+        // Add click tracking to apply buttons
+        document.querySelectorAll('.apply-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const jobCard = this.closest('.job-card');
+                const jobTitle = jobCard.querySelector('.job-title').textContent;
+                const company = jobCard.querySelector('.job-company').textContent.replace('🏢 ', '');
+                const site = jobCard.querySelector('.job-site').textContent;
+                
+                trackJobApplication(jobTitle, company, site);
+            });
+        });
+    </script>
+</body>
+</html>
