@@ -22,6 +22,7 @@ def extract_linkedin_username(url):
 @csrf_exempt  # Only for testing, use CSRF properly in production!
 def index(request):
     if request.method == 'POST':
+        print("trying to stay")
         profile_url = request.POST.get('linkedin_url')
         username = extract_linkedin_username(profile_url)
         
@@ -30,7 +31,10 @@ def index(request):
 
         try:        
             # Fetch data
+            print("trying to do  api creation")
             api = Linkedin(LINKEDIN_EMAIL, LINKEDIDN_PASSWORD)
+            print(api)
+            print("api creation success")
 
             resume_data = api.get_profile(username)
             contact = api.get_profile_contact_info(username)
@@ -38,6 +42,7 @@ def index(request):
             # Save to session or pass via redirect
             request.session['resume_data'] = resume_data
             request.session['contact'] = contact
+            print
             return redirect('resume')  # URL name of your resume view
         except Exception as e:
             return render(request, 'index.html', {'error': f'Error: {str(e)}'})
