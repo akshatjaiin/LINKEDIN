@@ -323,6 +323,26 @@
             transform: translateY(-2px);
         }
 
+        .btn-3d {
+            background: #fff;
+            color: #111;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 1.1em;
+            box-shadow: 6px 6px 0px 0px #222, 12px 12px 0px 0px #bbb;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .btn-3d:active {
+            box-shadow: 2px 2px 0px 0px #222, 4px 4px 0px 0px #bbb;
+            transform: translate(2px, 2px);
+        }
+
         .skills-to-develop {
             display: flex;
             flex-wrap: wrap;
@@ -506,6 +526,14 @@
                     </div>
                 </div>
             {% endif %}
+
+            <!-- ATS Resume Form -->
+            <form method="post" action="" class="ats-form" style="margin: 40px auto 0; max-width: 600px; background: #f8f9fa; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 32px; display: flex; flex-direction: column; align-items: stretch;">
+                {% csrf_token %}
+                <label for="ats_job_desc" style="font-weight: bold; color: #222; margin-bottom: 12px; font-size: 1.1em;">Paste Job Description for ATS Resume:</label>
+                <textarea id="ats_job_desc" name="ats_job_desc" rows="7" placeholder="Paste the job description here..." required style="resize: vertical; border-radius: 8px; border: 1.5px solid #bbb; padding: 16px; font-size: 1.05em; margin-bottom: 18px; background: #fff; color: #222; box-shadow: 2px 2px 0 #eee;"></textarea>
+                <button type="submit" class="btn-3d">Generate ATS Resume</button>
+            </form>
 
             <!-- Action Buttons -->
             <div class="action-buttons">

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib import messages
 from django.http import JsonResponse
 from django.core.cache import cache
@@ -350,6 +350,45 @@ def ai_analysis(request):
             'analysis': '',
             'jobs_data': []
         })
+
+@csrf_protect
+def ats_resume(request):
+    linkedin_data = request.session.get('linkedin_data')
+    ats_resume_html = None
+    if request.method == 'POST':
+        job_desc = request.POST.get('ats_job_desc', '').strip()
+        if not job_desc:
+            messages.error(request, 'Please paste a job description.')
+            return redirect('ai_analysis')
+        if not linkedin_data:
+            messages.error(request, 'No LinkedIn profile data found. Please analyze a profile first.')
+            return redirect('ai_analysis')
+        # Compose prompt for AI
+        prompt = f"""
+        Given the following LinkedIn profile data and job description, generate a tailored ATS-friendly resume in HTML format. The resume should be well-structured, concise, and highlight the most relevant skills and experience for the job.
+
+        LinkedIn Profile Data:
+        {json.dumps(linkedin_data, indent=2)}
+
+        Job Description:
+        {job_desc}
+        """
+        try:
+            response = openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are an expert resume writer and ATS optimization specialist."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=2000,
+                temperature=0.5
+            )
+            ats_resume_html = response.choices[0].message.content
+        except Exception as e:
+            logger.error(f"Error generating ATS resume: {str(e)}")
+            messages.error(request, f"Error generating ATS resume: {str(e)}")
+            return redirect('ai_analysis')
+    return render(request, 'ats_resume.html', {'ats_resume': ats_resume_html})
 
 def clear_session(request):
     """Clear session data and redirect to index"""

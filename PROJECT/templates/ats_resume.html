@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated ATS Resume</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 24px;
+        }
+        .resume-content {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .btn-3d {
+            background: #fff;
+            color: #111;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 1.1em;
+            box-shadow: 6px 6px 0px 0px #222, 12px 12px 0px 0px #bbb;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .btn-3d:active {
+            box-shadow: 2px 2px 0px 0px #222, 4px 4px 0px 0px #bbb;
+            transform: translate(2px, 2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generated ATS Resume</h1>
+        <div class="resume-content">
+            {{ ats_resume|safe }}
+        </div>
+        <a href="{% url 'ai_analysis' %}" class="btn-3d">← Back to Analysis</a>
+    </div>
+</body>
+</html>
