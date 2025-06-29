@@ -51,7 +51,7 @@ def fetch_jobs(search_term: str, location: str = "JAIPUR, IN", results: int = 10
         
         # Format results for AI response - handle pandas DataFrame properly
         job_summary = []
-        for idx, job in jobs.head(min(10, len(jobs))).iterrows():  # Show more jobs for better matching
+        for idx, job in jobs.head(len(jobs)).iterrows():  # Show more jobs for better matching
             job_info = {
                 "title": str(job.get('title', 'N/A')),
                 "company": str(job.get('company', 'N/A')),

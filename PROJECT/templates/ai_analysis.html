@@ -254,7 +254,7 @@
             
             {% if analysis %}
                 <div class="analysis-section">
-                    {{ analysis|linebreaks }}
+                    {{ analysis|safe }}
                 </div>
             {% else %}
                 <div class="loading">
