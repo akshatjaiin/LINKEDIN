@@ -9,7 +9,7 @@ cd LINKEDIN
 ```
 
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 ### ADD UR LINKEDIN_ID, LINKEDIN_EMAIL, OPENAI_API_KEY in .env file
 
