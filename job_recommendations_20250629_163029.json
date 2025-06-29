@@ -1,0 +1,164 @@
+{
+  "profile_analysis": {
+    "current_location": "Austin, TX",
+    "experience_level": "mid",
+    "primary_industry": "Technology",
+    "current_role": "Frontend Developer"
+  },
+  "recommended_job_titles": [
+    {
+      "title": "Senior Frontend Developer",
+      "match_percentage": 85,
+      "reasoning": "Sarah has a solid foundation in React and modern web technologies, making her well-suited for a senior role.",
+      "salary_range": "$90,000 - $120,000",
+      "growth_potential": "high"
+    },
+    {
+      "title": "React Engineer",
+      "match_percentage": 90,
+      "reasoning": "Her expertise in React and related technologies aligns closely with the requirements for a specialized React Engineer.",
+      "salary_range": "$95,000 - $125,000",
+      "growth_potential": "high"
+    },
+    {
+      "title": "UI/UX Developer",
+      "match_percentage": 75,
+      "reasoning": "With a background in graphic design and frontend development, Sarah can leverage her skills in a UI/UX-focused role.",
+      "salary_range": "$80,000 - $110,000",
+      "growth_potential": "medium"
+    }
+  ],
+  "target_locations": [
+    {
+      "location": "San Francisco, CA",
+      "job_market_score": 9,
+      "cost_of_living": "high",
+      "remote_opportunities": "high",
+      "reasoning": "San Francisco remains a tech hub with abundant opportunities for frontend developers, especially those skilled in React."
+    },
+    {
+      "location": "Seattle, WA",
+      "job_market_score": 8,
+      "cost_of_living": "high",
+      "remote_opportunities": "high",
+      "reasoning": "Seattle offers a strong tech market with major companies seeking skilled frontend developers."
+    },
+    {
+      "location": "Remote",
+      "job_market_score": 8,
+      "cost_of_living": "medium",
+      "remote_opportunities": "high",
+      "reasoning": "Remote work continues to be a viable option, providing flexibility and access to a wider range of opportunities."
+    }
+  ],
+  "skills_to_learn": [
+    {
+      "skill": "Next.js",
+      "priority": "high",
+      "time_to_learn": "3-6 months",
+      "learning_resources": [
+        "Official Next.js Documentation",
+        "Udemy Next.js Course"
+      ],
+      "market_demand": "high",
+      "salary_impact": "Increases potential salary by 10-15%"
+    },
+    {
+      "skill": "GraphQL",
+      "priority": "medium",
+      "time_to_learn": "3-6 months",
+      "learning_resources": [
+        "Apollo GraphQL Documentation",
+        "GraphQL Academy"
+      ],
+      "market_demand": "medium",
+      "salary_impact": "Increases potential salary by 5-10%"
+    },
+    {
+      "skill": "Web Accessibility",
+      "priority": "medium",
+      "time_to_learn": "2-4 months",
+      "learning_resources": [
+        "WebAIM",
+        "W3C Accessibility Guidelines"
+      ],
+      "market_demand": "medium",
+      "salary_impact": "Enhances job prospects and project quality"
+    }
+  ],
+  "current_skills_strength": {
+    "strong_skills": [
+      "React",
+      "JavaScript",
+      "Responsive Design"
+    ],
+    "moderate_skills": [
+      "Redux",
+      "TypeScript"
+    ],
+    "skill_gaps": [
+      "Next.js",
+      "GraphQL"
+    ]
+  },
+  "career_path_suggestions": [
+    {
+      "path": "Technical Lead",
+      "timeline": "2-3 years",
+      "key_milestones": [
+        "Master Next.js",
+        "Lead a small team",
+        "Contribute to open-source projects"
+      ],
+      "required_skills": [
+        "Leadership",
+        "Advanced JavaScript",
+        "Project Management"
+      ]
+    },
+    {
+      "path": "Full Stack Developer",
+      "timeline": "1-2 years",
+      "key_milestones": [
+        "Learn backend technologies",
+        "Build full-stack applications",
+        "Understand DevOps basics"
+      ],
+      "required_skills": [
+        "Node.js",
+        "Express.js",
+        "Database Management"
+      ]
+    }
+  ],
+  "market_insights": {
+    "industry_trends": [
+      "Increased demand for React and Next.js",
+      "Focus on performance optimization",
+      "Growing importance of web accessibility"
+    ],
+    "emerging_opportunities": [
+      "Remote-first companies",
+      "Startups focusing on AI-driven web applications"
+    ],
+    "competitive_landscape": "Competitive, with a high demand for specialized frontend skills"
+  },
+  "action_plan": {
+    "immediate_actions": [
+      "Update LinkedIn profile with recent projects",
+      "Network with industry professionals",
+      "Start learning Next.js"
+    ],
+    "short_term_goals": [
+      "Complete a Next.js project",
+      "Attend a tech conference or webinar",
+      "Apply for senior-level positions"
+    ],
+    "long_term_objectives": [
+      "Transition to a technical lead role",
+      "Contribute to open-source React projects",
+      "Expand skill set to include full-stack development"
+    ]
+  },
+  "recommendation_date": "2025-06-29T16:30:29.445933"
+}
