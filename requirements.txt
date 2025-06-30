@@ -5,3 +5,4 @@ openai==1.93.0
 pandas==2.3.0
 mistune
 dotenv
+numpy==2.3.1

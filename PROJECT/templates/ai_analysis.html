@@ -3,377 +3,557 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Analysis & Job Recommendations</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>AI LinkedIn Analysis</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
         }
 
-        .parent {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(5, 1fr);
-            gap: 15px;
-            height: 95vh;
-            padding: 20px;
-            max-width: 1400px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-        }
-        
-        .div1 {
-            grid-column: span 3;
-            grid-row: span 4;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            padding: 25px;
-            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
-        .div2 {
-            grid-column: span 2;
-            grid-row: span 5;
-            grid-column-start: 4;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #e74c3c;
+        }
+
+        .analysis-content {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            line-height: 1.8;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .analysis-content h1, .analysis-content h2, .analysis-content h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .analysis-content h1 {
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .analysis-content h2 {
+            font-size: 1.5em;
+            color: #34495e;
+        }
+
+        .analysis-content h3 {
+            font-size: 1.3em;
+            color: #7f8c8d;
+        }
+
+        .analysis-content ul, .analysis-content ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .analysis-content li {
+            margin-bottom: 8px;
+        }
+
+        .analysis-content strong {
+            color: #e74c3c;
+        }
+
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .recommendation-card {
+            background: white;
+            border-radius: 10px;
             padding: 20px;
-            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
         }
 
-        .div3 {
-            grid-column: span 3;
-            grid-row-start: 5;
-            background: rgba(255, 255, 255, 0.95);
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recommendation-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .recommendation-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .jobs-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
         .job-card {
-            background: #fff;
-            border-radius: 12px;
+            background: white;
+            border-radius: 10px;
             padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-            cursor: pointer;
+            border-left: 4px solid #27ae60;
         }
 
         .job-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            border-left-color: #764ba2;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
 
         .job-title {
-            font-size: 1.1rem;
+            font-size: 1.3em;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 8px;
-            line-height: 1.3;
+            margin-bottom: 10px;
         }
 
         .job-company {
-            color: #667eea;
-            font-weight: 500;
-            font-size: 0.95rem;
-            margin-bottom: 6px;
+            font-size: 1.1em;
+            color: #3498db;
+            margin-bottom: 8px;
         }
 
         .job-location {
             color: #7f8c8d;
-            font-size: 0.85rem;
             margin-bottom: 10px;
-        }
-
-        .job-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-        }
-
-        .job-date {
-            background: #e8f4fd;
-            color: #3498db;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-size: 0.9em;
         }
 
         .job-site {
-            background: #f8f9fa;
-            color: #6c757d;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-
-        .site-linkedin { background: #0077b5; color: white; }
-        .site-indeed { background: #2557a7; color: white; }
-        .site-naukri { background: #ff6b35; color: white; }
-
-        .jobs-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .jobs-count {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .analysis-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #28a745;
-        }
-
-        .section-title {
-            color: #2c3e50;
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .roadmap-placeholder {
-            text-align: center;
             color: #7f8c8d;
-            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-size: 0.9em;
         }
 
-        .roadmap-icon {
-            font-size: 3rem;
+        .job-date {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .job-salary {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .job-summary {
+            color: #555;
+            line-height: 1.5;
             margin-bottom: 15px;
-            color: #bdc3c7;
         }
 
-        .apply-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
+        .job-link {
+            display: inline-block;
+            background: #27ae60;
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        .job-link:hover {
+            background: #219a52;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #e74c3c;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
             text-decoration: none;
             display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
-        .apply-btn:hover {
-            background: linear-gradient(135deg, #764ba2, #667eea);
-            transform: scale(1.05);
+        .btn-primary {
+            background: #3498db;
             color: white;
-            text-decoration: none;
         }
 
-        .no-jobs {
-            text-align: center;
-            color: #7f8c8d;
-            padding: 40px 20px;
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
         }
 
-        /* Custom scrollbar */
-        .div1::-webkit-scrollbar, .div2::-webkit-scrollbar {
-            width: 6px;
+        .btn-secondary:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
         }
 
-        .div1::-webkit-scrollbar-track, .div2::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+        .btn-3d {
+            background: #fff;
+            color: #111;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 1.1em;
+            box-shadow: 6px 6px 0px 0px #222, 12px 12px 0px 0px #bbb;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 0;
         }
 
-        .div1::-webkit-scrollbar-thumb, .div2::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 10px;
+        .btn-3d:active {
+            box-shadow: 2px 2px 0px 0px #222, 4px 4px 0px 0px #bbb;
+            transform: translate(2px, 2px);
         }
 
-        .div1::-webkit-scrollbar-thumb:hover, .div2::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+        .skills-to-develop {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: #e67e22;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
         }
 
         @media (max-width: 768px) {
-            .parent {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-                gap: 15px;
-                height: auto;
+            .content {
+                padding: 20px;
             }
             
-            .div1, .div2, .div3 {
-                grid-column: span 1;
-                grid-row: span 1;
-                grid-column-start: auto;
-                grid-row-start: auto;
+            .recommendations-grid,
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="parent">
-        <!-- Div1: Resume Analysis Summary -->
-        <div class="div1">
-            <div class="section-title">
-                <i class="fas fa-brain"></i>
-                AI Resume Analysis
-            </div>
-            
-            {% if analysis %}
-                <div class="analysis-section">
-                    {{ analysis|safe }}
-                </div>
-            {% else %}
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin fa-2x"></i>
-                    <p class="mt-3">Analyzing your resume...</p>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 LinkedIn Profile Analysis</h1>
+            <p>AI-Powered Career Insights & Job Recommendations</p>
+        </div>
+
+        <div class="content">
+            {% if error %}
+                <div class="error-message">
+                    <strong>Error:</strong> {{ error }}
                 </div>
             {% endif %}
-        </div>
 
-        <!-- Div2: Job Listings -->
-        <div class="div2">
-            <div class="jobs-header">
-                <i class="fas fa-briefcase"></i>
-                <div class="jobs-count">
-                    {% if jobs_data %}
-                        {{ jobs_data.total_jobs_found|default:0 }} Jobs Found
-                    {% else %}
-                        Job Recommendations
-                    {% endif %}
+            {% if analysis_success %}
+                <div class="success-message">
+                    <strong>Analysis Complete!</strong> Your LinkedIn profile has been thoroughly analyzed.
                 </div>
-            </div>
+            {% endif %}
 
-            <div id="jobsContainer">
-                {% if jobs_data %}
-                    {% for job in jobs_data.jobs %}
-                        <div class="job-card" onclick="window.open('{{ job.job_url }}', '_blank')">
-                            <div class="job-title">{{ job.title }}</div>
-                            <div class="job-company">
-                                <i class="fas fa-building"></i> {{ job.company }}
-                            </div>
-                            <div class="job-location">
-                                <i class="fas fa-map-marker-alt"></i> {{ job.location }}
-                            </div>
-                            
-                            {% if job.salary != "N/A" %}
-                                <div class="job-salary">
-                                    <i class="fas fa-rupee-sign"></i> {{ job.salary }}
-                                </div>
-                            {% endif %}
+            <!-- AI Analysis Section -->
+            {% if analysis %}
+                <div class="section">
+                    <h2 class="section-title">📊 AI Profile Analysis</h2>
+                    <div class="analysis-content">
+                        {{ analysis|safe }}
+                    </div>
+                </div>
+            {% endif %}
 
-                            <div class="job-meta">
-                                <span class="job-site site-{{ job.site }}">{{ job.site|upper }}</span>
-                                {% if job.date_posted != "nan" and job.date_posted != "N/A" %}
-                                    <span class="job-date">{{ job.date_posted }}</span>
-                                {% endif %}
-                            </div>
+            <!-- Job Recommendations Metrics -->
+            {% if job_recommendations %}
+                <div class="section">
+                    <h2 class="section-title">🎯 Career Recommendations</h2>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">{{ job_recommendations.ATS_SCORE|default:"N/A" }}</div>
+                            <div class="metric-label">ATS Score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ job_recommendations.JOB_TITLES|length|default:"0" }}</div>
+                            <div class="metric-label">Recommended Roles</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ job_recommendations.RELATED_DOMAINS|length|default:"0" }}</div>
+                            <div class="metric-label">Related Domains</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ jobs_data|length|default:"0" }}</div>
+                            <div class="metric-label">Available Jobs</div>
+                        </div>
+                    </div>
 
-                            <div class="mt-3">
-                                <a href="{{ job.job_url }}" target="_blank" class="apply-btn" onclick="event.stopPropagation()">
-                                    <i class="fas fa-external-link-alt"></i> Apply Now
-                                </a>
+                    <div class="recommendations-grid">
+                        {% if job_recommendations.JOB_TITLES %}
+                            <div class="recommendation-card">
+                                <h3>🎯 Recommended Job Titles</h3>
+                                <ul>
+                                    {% for title in job_recommendations.JOB_TITLES %}
+                                        <li>{{ title }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if job_recommendations.LOCATIONS %}
+                            <div class="recommendation-card">
+                                <h3>📍 Suggested Locations</h3>
+                                <ul>
+                                    {% for location in job_recommendations.LOCATIONS %}
+                                        <li>{{ location }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if job_recommendations.RELATED_DOMAINS %}
+                            <div class="recommendation-card">
+                                <h3>🌐 Related Domains</h3>
+                                {% for domain in job_recommendations.RELATED_DOMAINS %}
+                                    <p><strong>{{ domain.domain }}</strong> ({{ domain.relevance_score }}% match)</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if job_recommendations.RECOMMENDATIONS %}
+                            <div class="recommendation-card">
+                                <h3>💡 Key Recommendations</h3>
+                                <ul>
+                                    {% for rec in job_recommendations.RECOMMENDATIONS %}
+                                        <li>{{ rec }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if job_recommendations.SKILLS_TO_DEVELOP %}
+                        <div style="margin-top: 30px;">
+                            <h3>🚀 Skills to Develop</h3>
+                            <div class="skills-to-develop">
+                                {% for skill in job_recommendations.SKILLS_TO_DEVELOP %}
+                                    <span class="skill-tag">{{ skill }}</span>
+                                {% endfor %}
                             </div>
                         </div>
-                    {% endfor %}
-                {% elif jobs_data %}
-                    <div class="no-jobs">
-                        <i class="fas fa-search fa-3x mb-3"></i>
-                        <p>No jobs found matching your criteria.</p>
-                        <small class="text-muted">Try adjusting your search parameters.</small>
-                    </div>
-                {% else %}
-                    <div class="loading">
-                        <i class="fas fa-spinner fa-spin fa-2x"></i>
-                        <p class="mt-3">Searching for jobs...</p>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Div3: Roadmap Generator (Locked) -->
-        <div class="div3">
-            <div class="roadmap-placeholder">
-                <i class="fas fa-lock roadmap-icon"></i>
-                <div>
-                    <strong>Roadmap Generator</strong>
-                    <br>
-                    <small>Coming Soon - Personalized learning paths to prepare for your target jobs</small>
+                    {% endif %}
                 </div>
+            {% endif %}
+
+            <!-- Job Listings Section -->
+            {% if jobs_data %}
+                <div class="section">
+                    <h2 class="section-title">💼 Available Job Opportunities</h2>
+                    <div class="jobs-section">
+                        <p style="text-align: center; margin-bottom: 20px; color: #7f8c8d;">
+                            Found {{ jobs_data|length }} relevant job opportunities for you
+                        </p>
+                        
+                        <div class="jobs-grid">
+                            {% for job in jobs_data %}
+                                <div class="job-card">
+                                    <div class="job-title">{{ job.title|default:"Job Title Not Available" }}</div>
+                                    <div class="job-company">{{ job.company|default:"Company Not Listed" }}</div>
+                                    <div class="job-location">📍 {{ job.location|default:"Location Not Specified" }}</div>
+                                    <div class="job-site">🌐 {{ job.site|default:"Site Unknown" }}</div>
+                                    <div class="job-date">🗓️ {{ job.date_posted|default:"Date Unknown" }}</div>
+                                    {% if job.min_amount or job.max_amount %}
+                                        <div class="job-salary">
+                                            💰
+                                            {% if job.min_amount and job.max_amount %}
+                                                {{ job.min_amount|floatformat:0 }} - {{ job.max_amount|floatformat:0 }} {{ job.currency|default:"" }}
+                                            {% elif job.min_amount %}
+                                                From {{ job.min_amount|floatformat:0 }} {{ job.currency|default:"" }}
+                                            {% elif job.max_amount %}
+                                                Up to {{ job.max_amount|floatformat:0 }} {{ job.currency|default:"" }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    {% if job.description %}
+                                        <div class="job-summary">{{ job.description|truncatewords:30 }}</div>
+                                    {% endif %}
+                                    {% if job.job_url %}
+                                        <a href="{{ job.job_url }}" target="_blank" class="job-link">View Job Details</a>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- ATS Resume Form -->
+            <form method="post" action="{% url 'ats_resume' %}" class="ats-form" style="margin: 40px auto 0; max-width: 600px; background: #f8f9fa; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 32px; display: flex; flex-direction: column; align-items: stretch;">
+                {% csrf_token %}
+                <label for="ats_job_desc" style="font-weight: bold; color: #222; margin-bottom: 12px; font-size: 1.1em;">Paste Job Description for ATS Resume:</label>
+                <textarea id="ats_job_desc" name="ats_job_desc" rows="7" placeholder="Paste the job description here..." required style="resize: vertical; border-radius: 8px; border: 1.5px solid #bbb; padding: 16px; font-size: 1.05em; margin-bottom: 18px; background: #fff; color: #222; box-shadow: 2px 2px 0 #eee;"></textarea>
+                <button type="submit" class="btn-3d">Generate ATS Resume</button>
+            </form>
+
+            <!-- ATS Resume Display -->
+            {% if ats_resume_html %}
+                <div class="section">
+                    <h2 class="section-title">📄 ATS Resume</h2>
+                    <div class="analysis-content">
+                        {{ ats_resume_html|safe }}
+                    </div>
+                </div>
+            {% else %}
+                <p style="color:#888;">No resume generated yet.</p>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{% url 'resume' %}" class="btn btn-secondary">← Back to Resume</a>
+                <a href="{% url 'index' %}" class="btn btn-primary">Analyze Another Profile</a>
+                <a href="{% url 'clear_session' %}" class="btn btn-secondary">Clear Session</a>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Add some interactivity
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects to job cards
-            const jobCards = document.querySelectorAll('.job-card');
-            jobCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.borderLeftWidth = '6px';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.borderLeftWidth = '4px';
-                });
-            });
-
-            // Auto-refresh functionality (optional)
-            // You can add AJAX calls here to periodically update job listings
-        });
-
-        // Function to handle job application tracking
-        function trackJobApplication(jobTitle, company, site) {
-            // You can add analytics tracking here
-            console.log(`User clicked on: ${jobTitle} at ${company} via ${site}`);
-        }
-
-        // Add click tracking to apply buttons
-        document.querySelectorAll('.apply-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const jobCard = this.closest('.job-card');
-                const jobTitle = jobCard.querySelector('.job-title').textContent;
-                const company = jobCard.querySelector('.job-company').textContent.replace('🏢 ', '');
-                const site = jobCard.querySelector('.job-site').textContent;
-                
-                trackJobApplication(jobTitle, company, site);
-            });
-        });
-    </script>
 </body>
 </html>
