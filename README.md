@@ -9,7 +9,9 @@ cd LINKEDIN
 ```
 
 ```
+<<<<<<< HEAD
 pip install -r requirements.txt
+pip install google-genai
 ```
 ### ADD UR LINKEDIN_ID, LINKEDIN_EMAIL, OPENAI_API_KEY in .env file
 

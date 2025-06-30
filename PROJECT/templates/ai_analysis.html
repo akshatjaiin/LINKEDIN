@@ -535,6 +535,18 @@
                 <button type="submit" class="btn-3d">Generate ATS Resume</button>
             </form>
 
+            <!-- ATS Resume Display -->
+            {% if ats_resume_html %}
+                <div class="section">
+                    <h2 class="section-title">📄 ATS Resume</h2>
+                    <div class="analysis-content">
+                        {{ ats_resume_html|safe }}
+                    </div>
+                </div>
+            {% else %}
+                <p style="color:#888;">No resume generated yet.</p>
+            {% endif %}
+
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <a href="{% url 'resume' %}" class="btn btn-secondary">← Back to Resume</a>

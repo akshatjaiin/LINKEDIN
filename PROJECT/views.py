@@ -20,6 +20,14 @@ from google.genai import types
 from dotenv import load_dotenv
 from django.utils.safestring import mark_safe
 
+def clean_html_response(ats_resume_md):
+    # Remove code fences like ```html and ```
+    if ats_resume_md:
+        cleaned = re.sub(r'^```(?:html)?\s*', '', ats_resume_md.strip(), flags=re.IGNORECASE)
+        cleaned = re.sub(r'\s*```$', '', cleaned)
+        return cleaned
+    return ats_resume_md
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -300,21 +308,27 @@ class LinkedInAnalyzerService:
             chat_prompt = f"""
             You are an expert resume writer. I will provide you with a current resume in markdown format and a user request for modifications.
 
-            **Current Resume:**
+            <h1>Current Resume:</h1>
             {current_resume}
 
-            **User Request:**
+            <h2>User Request:</h2>
             {user_message}
 
-            **Instructions:**
+            <h3>Instructions:</h3>
+            <p>
+            ```html
+            ```
+            </p>
+            <h7>do not include backtick and file name in header</h7>
             - Make the requested changes while maintaining ATS-friendly formatting
             - Keep the overall structure and professional tone
             - Only modify what's specifically requested
-            - Return the complete updated resume in markdown format
+            - Return the complete updated resume in html <body> format
             - Ensure all changes enhance the resume's effectiveness
             - Use standard markdown formatting (headers with #, ##, ###, bullet points with -, etc.)
 
-            **Output:** Return only the updated resume in markdown format, nothing else.
+            <h1>Output:</h1> <p>Return only the updated resume in html <body> format, nothing else.</p>
+            no need to give head and style
             """
 
             response = gemini_client.models.generate_content(
@@ -568,7 +582,7 @@ def ats_resume(request):
     ats_resume_html = LinkedInAnalyzerService.markdown_to_html(ats_resume_md) if ats_resume_md else ''
     
     context = {
-        'ats_resume_html': ats_resume_html,
+        'ats_resume_md': ats_resume_md if ats_resume_md else '',
         'ats_resume_raw': ats_resume_md or '',
         'show_job_form': show_job_form,
         'chat_history': request.session.get('ats_chat_history', []),
@@ -656,7 +670,7 @@ def ats_chat_api(request):
             
             return JsonResponse({
                 'success': True,
-                'updated_resume_html': str(updated_resume_html),
+                'updated_resume_html': mistune.html(updated_resume),
                 'updated_resume_raw': updated_resume,
                 'chat_history': chat_history
             })
@@ -671,3 +685,4 @@ def ats_chat_api(request):
     except Exception as e:
         logger.error(f"Error in ats_chat_api: {str(e)}")
         return JsonResponse({'error': 'Internal server error'}, status=500)
+    

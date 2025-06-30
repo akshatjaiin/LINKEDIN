@@ -52,13 +52,333 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            animation: slidePattern 30s linear infinite;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.12) 0%, transparent 60%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="linkedinPattern" width="60" height="60" patternUnits="userSpaceOnUse"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.2)"/><path d="M15,45 Q30,15 45,45" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/><rect x="10" y="10" width="8" height="8" rx="2" fill="rgba(255,255,255,0.05)"/><rect x="42" y="42" width="6" height="6" rx="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="200" height="200" fill="url(%23linkedinPattern)"/></svg>');
+            animation: floatingElements 25s ease-in-out infinite;
+            z-index: 1;
         }
 
-        @keyframes slidePattern {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(20px) translateY(20px); }
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%);
+            animation: shimmer 12s linear infinite;
+            z-index: 1;
+        }
+
+        /* Animated LinkedIn Elements */
+        .linkedin-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .profile-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            width: 200px;
+            height: 120px;
+            animation: floatProfile 20s ease-in-out infinite;
+        }
+
+        .profile-card:nth-child(1) {
+            top: 15%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .profile-card:nth-child(2) {
+            top: 70%;
+            right: 10%;
+            animation-delay: -8s;
+        }
+
+        .profile-card:nth-child(3) {
+            top: 40%;
+            left: 85%;
+            animation-delay: -15s;
+        }
+
+        @keyframes floatProfile {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translateY(-20px) rotate(2deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-10px) rotate(-1deg);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translateY(-25px) rotate(1.5deg);
+                opacity: 0.5;
+            }
+        }
+
+        .resume-icon {
+            position: absolute;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.2);
+            animation: bounceResume 15s ease-in-out infinite;
+        }
+
+        .resume-icon:nth-child(4) {
+            top: 25%;
+            right: 15%;
+            animation-delay: -3s;
+        }
+
+        .resume-icon:nth-child(5) {
+            bottom: 20%;
+            left: 15%;
+            animation-delay: -10s;
+        }
+
+        @keyframes bounceResume {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translateY(-30px) scale(1.1);
+                opacity: 0.4;
+            }
+        }
+
+        /* AI Brain Animation */
+        .ai-brain {
+            position: absolute;
+            top: 10%;
+            right: 20%;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.15);
+            animation: pulseBrain 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseBrain {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.15;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.3;
+            }
+        }
+
+        /* Connection Lines */
+        .connection-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: drawLine 10s ease-in-out infinite;
+        }
+
+        .line:nth-child(1) {
+            top: 30%;
+            left: 20%;
+            width: 200px;
+            transform: rotate(25deg);
+            animation-delay: 0s;
+        }
+
+        .line:nth-child(2) {
+            top: 60%;
+            right: 25%;
+            width: 150px;
+            transform: rotate(-35deg);
+            animation-delay: -5s;
+        }
+
+        .line:nth-child(3) {
+            bottom: 30%;
+            left: 30%;
+            width: 180px;
+            transform: rotate(15deg);
+            animation-delay: -8s;
+        }
+
+        @keyframes drawLine {
+            0%, 100% {
+                opacity: 0;
+                transform: scaleX(0) rotate(var(--rotation, 0deg));
+            }
+            50% {
+                opacity: 1;
+                transform: scaleX(1) rotate(var(--rotation, 0deg));
+            }
+        }
+
+        @keyframes floatingElements {
+            0%, 100% { 
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            25% { 
+                transform: translateX(10px) translateY(-15px) rotate(1deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateX(-5px) translateY(-10px) rotate(-0.5deg);
+                opacity: 0.9;
+            }
+            75% { 
+                transform: translateX(15px) translateY(-20px) rotate(1.5deg);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        /* Floating LinkedIn Icons */
+        .floating-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-icon {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 2rem;
+            animation: float 20s infinite linear;
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .floating-icon:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+        }
+
+        .floating-icon:nth-child(3) {
+            top: 80%;
+            left: 20%;
+            animation-delay: -10s;
+            animation-duration: 35s;
+        }
+
+        .floating-icon:nth-child(4) {
+            top: 30%;
+            left: 70%;
+            animation-delay: -15s;
+            animation-duration: 28s;
+        }
+
+        .floating-icon:nth-child(5) {
+            top: 10%;
+            left: 60%;
+            animation-delay: -20s;
+            animation-duration: 32s;
+        }
+
+        .floating-icon:nth-child(6) {
+            top: 70%;
+            left: 40%;
+            animation-delay: -8s;
+            animation-duration: 26s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Particle System */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 15s infinite linear;
+        }
+
+        .particle:nth-child(odd) {
+            background: rgba(255, 255, 255, 0.05);
+            animation-duration: 20s;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
         }
 
         .hero-content {
@@ -237,6 +557,7 @@
         .jury-section {
             background: var(--linkedin-white);
             padding: 5rem 0;
+            overflow: hidden;
         }
 
         .jury-title {
@@ -247,31 +568,69 @@
             margin-bottom: 3rem;
         }
 
+        .jury-container {
+            overflow-x: auto;
+            padding: 1rem 0;
+            cursor: grab;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .jury-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .jury-container:active {
+            cursor: grabbing;
+        }
+
+        .jury-scroll-wrapper {
+            display: flex;
+            gap: 2rem;
+            width: max-content;
+            animation: slowScroll 20s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .jury-container:hover .jury-scroll-wrapper {
+            animation-play-state: running;
+        }
+
+        @keyframes slowScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
         .jury-card {
             background: var(--linkedin-white);
-            border-radius: 15px;
-            padding: 2rem;
+            border-radius: 12px;
+            padding: 1.5rem;
             box-shadow: var(--shadow-md);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
-            height: 100%;
             text-align: center;
+            min-width: 280px;
+            flex-shrink: 0;
         }
 
         .jury-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
             border-color: var(--linkedin-primary);
         }
 
         .jury-image {
-            width: 150px;
-            height: 150px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
             display: block;
-            border: 4px solid var(--linkedin-light);
+            border: 3px solid var(--linkedin-light);
             transition: all 0.3s ease;
         }
 
@@ -281,22 +640,24 @@
         }
 
         .jury-name {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .jury-role {
             color: var(--text-secondary);
-            font-size: 1rem;
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
         }
 
         .jury-linkedin {
             color: var(--linkedin-primary);
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.85rem;
             transition: color 0.3s ease;
         }
 
@@ -441,12 +802,85 @@
             .jury-section {
                 padding: 3rem 0;
             }
+            
+            .jury-card {
+                min-width: 240px;
+                padding: 1.2rem;
+            }
+            
+            .jury-image {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .jury-name {
+                font-size: 1rem;
+            }
+            
+            .jury-role {
+                font-size: 0.8rem;
+            }
         }
+
+        /* Mobile Responsive */
     </style>
 </head>
 <body>
     <!-- Hero Section -->
     <section class="hero-section">
+
+
+        <!-- Floating LinkedIn Icons -->
+        <div class="floating-icons">
+            <i class="fab fa-linkedin floating-icon"></i>
+            <i class="fas fa-users floating-icon"></i>
+            <i class="fas fa-briefcase floating-icon"></i>
+            <i class="fas fa-chart-line floating-icon"></i>
+            <i class="fas fa-graduation-cap floating-icon"></i>
+            <i class="fas fa-award floating-icon"></i>
+        </div>
+
+        <!-- LinkedIn Profile Elements -->
+        <div class="linkedin-elements">
+            <!-- Animated Profile Cards -->
+            <div class="profile-card">
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 50%; margin-bottom: 8px;"></div>
+                <div style="width: 80%; height: 8px; background: rgba(255,255,255,0.2); margin-bottom: 4px; border-radius: 4px;"></div>
+                <div style="width: 60%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px;"></div>
+            </div>
+            
+            <div class="profile-card">
+                <div style="width: 35px; height: 35px; background: rgba(255,255,255,0.25); border-radius: 50%; margin-bottom: 6px;"></div>
+                <div style="width: 75%; height: 7px; background: rgba(255,255,255,0.2); margin-bottom: 3px; border-radius: 3px;"></div>
+                <div style="width: 65%; height: 5px; background: rgba(255,255,255,0.15); border-radius: 2px;"></div>
+            </div>
+            
+            <div class="profile-card">
+                <div style="width: 38px; height: 38px; background: rgba(255,255,255,0.28); border-radius: 50%; margin-bottom: 7px;"></div>
+                <div style="width: 85%; height: 7px; background: rgba(255,255,255,0.22); margin-bottom: 4px; border-radius: 3px;"></div>
+                <div style="width: 55%; height: 6px; background: rgba(255,255,255,0.18); border-radius: 3px;"></div>
+            </div>
+
+            <!-- Resume Icons -->
+            <i class="fas fa-file-alt resume-icon"></i>
+            <i class="fas fa-download resume-icon"></i>
+        </div>
+
+        <!-- AI Brain Animation -->
+        <div class="ai-brain">
+            <i class="fas fa-brain"></i>
+        </div>
+
+        <!-- Connection Lines -->
+        <div class="connection-lines">
+            <div class="line" style="--rotation: 25deg;"></div>
+            <div class="line" style="--rotation: -35deg;"></div>
+            <div class="line" style="--rotation: 15deg;"></div>
+        </div>
+
+        <!-- Particle System -->
+        <div class="particles" id="particles"></div>
+
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10 col-xl-8">
@@ -517,40 +951,117 @@
     <!-- Jury Section -->
     <section class="jury-section">
         <div class="container">
-            <h2 class="jury-title">Meet Our Esteemed Jury</h2>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
+            <h2 class="jury-title">Introducing Our Distinguished Jury Panel</h2>
+            <div class="jury-container">
+                <div class="jury-scroll-wrapper">
                     <div class="jury-card">
                         <img src="https://media.licdn.com/dms/image/v2/C4E03AQGnJU-TUHbb-A/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1550470734751?e=1756944000&v=beta&t=nbLj6tefzhNIGc_DsjeQJ6j4VSxv5qcJSZHllt4t4lg" 
                              alt="Jury Member 1" 
                              class="jury-image">
-                        <h4 class="jury-name">Industry Expert</h4>
-                        <p class="jury-role">Senior Technology Leader</p>
-                        <a href="#" class="jury-linkedin">
+                        <h4 class="jury-name">Rahul Gupta</h4>
+                        <p class="jury-role">Founder DataMonk</p>
+                        <a href="https://www.linkedin.com/in/rahul1990gupta/" class="jury-linkedin" target="_blank">
                             <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
                         </a>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
                     <div class="jury-card">
                         <img src="https://media.licdn.com/dms/image/v2/D5603AQGhL5sNiCymRA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1710271148696?e=1756944000&v=beta&t=JawpxzgiU7wO-0aPvmkP7W12QBddn4CNAmUijeZaYM0" 
                              alt="Jury Member 2" 
                              class="jury-image">
-                        <h4 class="jury-name">Innovation Specialist</h4>
-                        <p class="jury-role">AI & Machine Learning Expert</p>
-                        <a href="#" class="jury-linkedin">
+                        <h4 class="jury-name">Pallavi Agarwal</h4>
+                        <p class="jury-role">Founder PalEnable Solutions</p>
+                        <a href="https://www.linkedin.com/in/pallavijainagrawal/" class="jury-linkedin" target="_blank">
                             <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
                         </a>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
                     <div class="jury-card">
                         <img src="https://media.licdn.com/dms/image/v2/D5635AQHqZrZcBk9jsw/profile-framedphoto-shrink_400_400/B56Za0uTvWGoAc-/0/1746788760939?e=1751860800&v=beta&t=4YcaU9L37Y-4AnmuPFJvpvORdxczSJznkfh3HujGsTw" 
                              alt="Jury Member 3" 
                              class="jury-image">
-                        <h4 class="jury-name">Product Strategist</h4>
-                        <p class="jury-role">Digital Transformation Leader</p>
-                        <a href="#" class="jury-linkedin">
+                        <h4 class="jury-name">Aman Nagpal</h4>
+                        <p class="jury-role">Founder Get Marketed</p>
+                        <a href="https://www.linkedin.com/in/aman-nagpal-323526191/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/C4E03AQHHp4vvMo3fFg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1606367723598?e=1756944000&v=beta&t=5yMc7ogi4MVvJAuhq7a6mBjnMfUPC5CeNKsPp2oooXw" 
+                             alt="Jury Member 4" 
+                             class="jury-image">
+                        <h4 class="jury-name">Tushar Goyal</h4>
+                        <p class="jury-role">CTO Regex Software</p>
+                        <a href="https://www.linkedin.com/in/tushar-goyal-229456114/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQEi6uejWIr8cg/profile-displayphoto-shrink_400_400/B4DZYl4isoGwAk-/0/1744392301882?e=1756944000&v=beta&t=7D1N1bRcq51ngCDVQf9NuZj53jTXd8LrNAhlVr_hMjY"
+                             alt="Jury Member 5" 
+                             class="jury-image">
+                        <h4 class="jury-name">Siddharth Kharra</h4>
+                        <p class="jury-role">Nask Technologies Private Limited</p>
+                        <a href="https://www.linkedin.com/in/siddharth-kharra/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D35AQGwl4a7LFCqoA/profile-framedphoto-shrink_400_400/B4DZeHPaniHAAg-/0/1750320655187?e=1751878800&v=beta&t=3Pl1On3a1IvJ3XDHfKVhD6T1Z9JPQomFyAQXuUaG9Fs"
+                             alt="Jury Member 6" 
+                             class="jury-image">
+                        <h4 class="jury-name">Prasson Agarwal</h4>
+                        <p class="jury-role">Founder & CEO Talknlock</p>
+                        <a href="https://www.linkedin.com/in/prassonagrawal/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <!-- Duplicate cards for seamless loop -->
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/C4E03AQGnJU-TUHbb-A/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1550470734751?e=1756944000&v=beta&t=nbLj6tefzhNIGc_DsjeQJ6j4VSxv5qcJSZHllt4t4lg" 
+                             alt="Jury Member 1" 
+                             class="jury-image">
+                        <h4 class="jury-name">Rahul Gupta</h4>
+                        <p class="jury-role">Founder DataMonk</p>
+                        <a href="https://www.linkedin.com/in/rahul1990gupta/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/D5603AQGhL5sNiCymRA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1710271148696?e=1756944000&v=beta&t=JawpxzgiU7wO-0aPvmkP7W12QBddn4CNAmUijeZaYM0" 
+                             alt="Jury Member 2" 
+                             class="jury-image">
+                        <h4 class="jury-name">Pallavi Agarwal</h4>
+                        <p class="jury-role">Founder PalEnable Solutions</p>
+                        <a href="https://www.linkedin.com/in/pallavijainagrawal/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/D5635AQHqZrZcBk9jsw/profile-framedphoto-shrink_400_400/B56Za0uTvWGoAc-/0/1746788760939?e=1751860800&v=beta&t=4YcaU9L37Y-4AnmuPFJvpvORdxczSJznkfh3HujGsTw" 
+                             alt="Jury Member 3" 
+                             class="jury-image">
+                        <h4 class="jury-name">Aman Nagpal</h4>
+                        <p class="jury-role">Founder Get Marketed</p>
+                        <a href="https://www.linkedin.com/in/aman-nagpal-323526191/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGV2hMsZ4hViA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1686973431792?e=1756944000&v=beta&t=ngYn0aQfrkvVfV__NJwpvgFOQcZ5JfvNJdQ8hoinYQc" 
+                             alt="Jury Member 3" 
+                             class="jury-image">
+                        <h4 class="jury-name">Jigar Vyas</h4>
+                        <p class="jury-role">AI Engineer Golden eagle</p>
+                        <a href="https://www.linkedin.com/in/jigarvyass/" class="jury-linkedin" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
+                        </a>
+                    </div>
+                    <div class="jury-card">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQFSXejcjXKNYA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1693654480531?e=1756944000&v=beta&t=BO93s_xQzNguAJuRXNoKxsO9FEOXKnCDYFDrsX8NJYo"
+                             alt="Jury Member 3" 
+                             class="jury-image">
+                        <h4 class="jury-name">Aabhash Kesharwani</h4>
+                        <p class="jury-role">Product Designer</p>
+                        <a href="https://www.linkedin.com/in/aabhashkesharwani/" class="jury-linkedin" target="_blank">
                             <i class="fab fa-linkedin me-1"></i>View LinkedIn Profile
                         </a>
                     </div>
@@ -561,7 +1072,7 @@
 
     <!-- Features Section (keeping existing) -->
     <section class="features-section">
-        <h2 class="features-title">Why Choose Our AI Resume Generator?</h2>
+        <h2 class="features-title">Why Choose Our Linkedin Profile Analyzer?</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">🤖</div>
@@ -639,7 +1150,7 @@
             const parallax = document.querySelector('.hero-section::before');
             if (parallax) {
                 const speed = scrolled * 0.5;
-                parallax.style.transform = `translateY(${speed}px)`;
+                parallax.style.transform = translateY(${speed}px);
             }
         });
 
@@ -665,6 +1176,43 @@
             card.style.transition = 'all 0.6s ease';
             observer.observe(card);
         });
+
+        // Create dynamic particle system
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random size between 2px and 6px
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            // Random horizontal position
+            particle.style.left = Math.random() * 100 + '%';
+            
+            // Random animation delay
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            
+            // Random animation duration between 15-25 seconds
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            
+            document.getElementById('particles').appendChild(particle);
+            
+            // Remove particle after animation completes
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 25000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500);
+
+        // Create initial particles
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createParticle, i * 200);
+        }
     </script>
 </body>
 </html>

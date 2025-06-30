@@ -29,6 +29,9 @@
             padding: 30px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             margin-bottom: 30px;
+            overflow-x: auto;
+            word-break: break-word;
+            max-width: 100%;
         }
         .btn-3d {
             background: #fff;
@@ -85,10 +88,11 @@
             <textarea id="chat_message" name="chat_message" class="chat-input" rows="3" placeholder="Type your request..."></textarea>
             <button type="submit" class="btn-3d">Update Resume</button>
         </form>
-        <form method="get" action="" style="margin-top: 20px;">
+        <form method="get" action="" style="margin-top: 20px; display: flex; gap: 10px;">
             <button type="submit" name="download" value="1" class="btn-3d">Download Resume (Markdown)</button>
+            <button type="submit" name="download_txt" value="1" class="btn-3d">Download Resume (Text)</button>
         </form>
-        <a href="{% url 'ai_analysis' %}" class="btn-3d">← Back to Analysis</a>
+        <a href="{% url 'ai_analysis' %}" class="btn-3d">&larr; Back to Analysis</a>
     </div>
 </body>
 </html>
