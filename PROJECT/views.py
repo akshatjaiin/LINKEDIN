@@ -27,6 +27,12 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
+# Initialize mistune renderer with proper configuration
+markdown_renderer = mistune.create_markdown(
+    escape=False,
+    plugins=['strikethrough', 'footnotes', 'table']
+)
+
 # Configuration
 @dataclass
 class Config:
@@ -262,6 +268,7 @@ class LinkedInAnalyzerService:
             - Structure with clear sections: Summary, Experience, Skills, Education
             - Use bullet points for achievements with quantifiable results where possible
             - Ensure ATS readability with proper formatting
+            - Use standard markdown formatting (headers with #, ##, ###, bullet points with -, etc.)
 
             **LinkedIn Profile Data:**
             {json.dumps(linkedin_data, indent=2)}
@@ -305,6 +312,7 @@ class LinkedInAnalyzerService:
             - Only modify what's specifically requested
             - Return the complete updated resume in markdown format
             - Ensure all changes enhance the resume's effectiveness
+            - Use standard markdown formatting (headers with #, ##, ###, bullet points with -, etc.)
 
             **Output:** Return only the updated resume in markdown format, nothing else.
             """
@@ -322,6 +330,27 @@ class LinkedInAnalyzerService:
         except Exception as e:
             logger.error(f"Error updating resume with chat: {str(e)}")
             return None
+
+    @staticmethod
+    def markdown_to_html(markdown_text: str) -> str:
+        """Convert markdown to HTML safely"""
+        if not markdown_text:
+            return ""
+        
+        try:
+            # Clean up the markdown text
+            cleaned_markdown = markdown_text.strip()
+            
+            # Convert markdown to HTML
+            html_content = markdown_renderer(cleaned_markdown)
+            
+            # Return as safe HTML
+            return mark_safe(html_content)
+            
+        except Exception as e:
+            logger.error(f"Error converting markdown to HTML: {str(e)}")
+            # Return as plain text if conversion fails
+            return mark_safe(f"<pre>{markdown_text}</pre>")
 
 # Views
 @csrf_exempt
@@ -406,8 +435,11 @@ def ai_analysis(request):
                 logger.error(f"Error fetching jobs: {str(e)}")
                 jobs_data = []
         
+        # Convert analysis markdown to HTML
+        analysis_html = LinkedInAnalyzerService.markdown_to_html(ai_analysis_result['analysis'])
+        
         context = {
-            'analysis': mistune.html(ai_analysis_result['analysis']),
+            'analysis': analysis_html,
             'analysis_success': ai_analysis_result['success'],
             'job_recommendations': job_recommendations,
             'jobs_data': jobs_data.get('jobs', []),  # Pass only the list of jobs
@@ -448,8 +480,12 @@ def ats_resume(request):
             if not job_desc:
                 messages.error(request, 'Please enter a job description.')
                 return render(request, 'ats_resume_md.html', {
-                    'ats_resume_md': '',
-                    'show_job_form': True
+                    'ats_resume_html': '',
+                    'ats_resume_raw': '',
+                    'show_job_form': True,
+                    'chat_history': [],
+                    'job_description': '',
+                    'profile_data': linkedin_data.get('profile', {}),
                 })
             
             try:
@@ -528,8 +564,11 @@ def ats_resume(request):
     # Determine if we should show the job description form
     show_job_form = not ats_resume_md
     
+    # Convert markdown to HTML for display
+    ats_resume_html = LinkedInAnalyzerService.markdown_to_html(ats_resume_md) if ats_resume_md else ''
+    
     context = {
-        'ats_resume_md': mistune.html(ats_resume_md) if ats_resume_md else '',
+        'ats_resume_html': ats_resume_html,
         'ats_resume_raw': ats_resume_md or '',
         'show_job_form': show_job_form,
         'chat_history': request.session.get('ats_chat_history', []),
@@ -537,7 +576,7 @@ def ats_resume(request):
         'profile_data': linkedin_data.get('profile', {}),
     }
 
-    print(f"context: {context}")  # Debugging output
+    logger.info(f"ATS Resume context - HTML length: {len(str(ats_resume_html))}, Raw length: {len(ats_resume_md or '')}")
     
     return render(request, 'ats_resume_md.html', context)
 
@@ -612,9 +651,12 @@ def ats_chat_api(request):
             ])
             request.session['ats_chat_history'] = chat_history
             
+            # Convert to HTML for frontend
+            updated_resume_html = LinkedInAnalyzerService.markdown_to_html(updated_resume)
+            
             return JsonResponse({
                 'success': True,
-                'updated_resume_html': mark_safe(mistune.html(updated_resume)),
+                'updated_resume_html': str(updated_resume_html),
                 'updated_resume_raw': updated_resume,
                 'chat_history': chat_history
             })
