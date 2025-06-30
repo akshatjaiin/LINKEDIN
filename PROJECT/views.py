@@ -267,7 +267,7 @@ class LinkedInAnalyzerService:
         """Generate ATS-optimized resume using Gemini AI"""
         try:
             prompt = f"""
-            As an expert resume writer and ATS specialist, create a tailored, ATS-friendly resume in markdown format based on the LinkedIn profile data and job description provided.
+            As an expert resume writer and ATS specialist, create a tailored, ATS-friendly resume in html format based on the LinkedIn profile data and job description provided.
 
             **Instructions:**
             - Focus on relevant experience, skills, and achievements
@@ -276,7 +276,7 @@ class LinkedInAnalyzerService:
             - Structure with clear sections: Summary, Experience, Skills, Education
             - Use bullet points for achievements with quantifiable results where possible
             - Ensure ATS readability with proper formatting
-            - Use standard markdown formatting (headers with #, ##, ###, bullet points with -, etc.)
+            - Use standard html formatting (headers with #, ##, ###, bullet points with -, etc.)
 
             **LinkedIn Profile Data:**
             {json.dumps(linkedin_data, indent=2)}
@@ -284,7 +284,7 @@ class LinkedInAnalyzerService:
             **Target Job Description:**
             {job_description}
 
-            **Output Format:** Clean markdown with proper headers and formatting.
+            **Output Format:** Clean html with proper headers and formatting.
             """
 
             response = gemini_client.models.generate_content(
