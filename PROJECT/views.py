@@ -582,7 +582,7 @@ def ats_resume(request):
     ats_resume_html = LinkedInAnalyzerService.markdown_to_html(ats_resume_md) if ats_resume_md else ''
     
     context = {
-        'ats_resume_md': ats_resume_md if ats_resume_md else '',
+        'ats_resume_md': clean_html_response(ats_resume_md) if ats_resume_md else '',
         'ats_resume_raw': ats_resume_md or '',
         'show_job_form': show_job_form,
         'chat_history': request.session.get('ats_chat_history', []),
