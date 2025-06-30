@@ -269,7 +269,8 @@ class LinkedInAnalyzerService:
             prompt = f"""
             As an expert resume writer and ATS specialist, create a tailored, ATS-friendly resume in html format based on the LinkedIn profile data and job description provided.
 
-            **Instructions:**
+            <h1>Instructions:</h1>
+            <ul>
             - Focus on relevant experience, skills, and achievements
             - Make the resume as detailed as possible 
             - Use keywords from the job description naturally throughout
@@ -277,14 +278,14 @@ class LinkedInAnalyzerService:
             - Use bullet points for achievements with quantifiable results where possible
             - Ensure ATS readability with proper formatting
             - Use standard html formatting (headers with #, ##, ###, bullet points with -, etc.)
-
-            **LinkedIn Profile Data:**
+            </ul>
+            <h3>LinkedIn Profile Data:</h3>
             {json.dumps(linkedin_data, indent=2)}
 
-            **Target Job Description:**
+            <h4>Target Job Description:</h4>
             {job_description}
-
-            **Output Format:** Clean html with proper headers and formatting.
+            * do not give markdown code in any case never ever.
+            <h2/>Output Format:</h2> Clean html with proper headers and formatting.
             """
 
             response = gemini_client.models.generate_content(
@@ -316,17 +317,17 @@ class LinkedInAnalyzerService:
 
             <h3>Instructions:</h3>
             <p>
-            ```html
-            ```
+            
             </p>
-            <h7>do not include backtick and file name in header</h7>
+            <h7>do not include backtick and file name in header dont write(```html
+            ```)</h7>
             - Make the requested changes while maintaining ATS-friendly formatting
             - Keep the overall structure and professional tone
             - Only modify what's specifically requested
             - Return the complete updated resume in html <body> format
             - Ensure all changes enhance the resume's effectiveness
             - Use standard markdown formatting (headers with #, ##, ###, bullet points with -, etc.)
-
+            - Never use markdown ever.
             <h1>Output:</h1> <p>Return only the updated resume in html <body> format, nothing else.</p>
             no need to give head and style
             """
