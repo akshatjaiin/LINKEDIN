@@ -493,37 +493,6 @@ def api_get_ai_analysis(request):
             }
         )
 
-    # =======
-    #         job_recommendations = LinkedInAnalyzerService.generate_job_recommendations(linkedin_data)
-    #
-    #         # Fetch actual job listings if recommendations are available
-    #         jobs_data = []
-    #         if job_recommendations and job_recommendations.get('JOB_TITLES'):
-    #             primary_job_title = job_recommendations['JOB_TITLES'][0]
-    #             primary_location = job_recommendations.get('LOCATIONS', [''])[0] if job_recommendations.get('LOCATIONS') else ''
-    #
-    #             try:
-    #                 jobs_data = jobs.fetch_jobs(primary_job_title, location=primary_location)
-    #                 request.session['jobs'] = jobs_data.get('jobs', [])  # Store only the list of jobs
-    #                 logger.info(f"Fetched {len(jobs_data.get('jobs', []))} jobs for {primary_job_title}")
-    #             except Exception as e:
-    #                 logger.error(f"Error fetching jobs: {str(e)}")
-    #                 jobs_data = []
-    #
-    #         # Convert analysis markdown to HTML
-    #         analysis_html = LinkedInAnalyzerService.markdown_to_html(ai_analysis_result['analysis'])
-    #
-    #         context = {
-    #             'analysis': analysis_html,
-    #             'analysis_success': ai_analysis_result['success'],
-    #             'job_recommendations': job_recommendations,
-    #             'jobs_data': jobs_data.get('jobs', []),  # Pass only the list of jobs
-    #             'profile_data': linkedin_data.get('profile', {}),
-    #         }
-    #
-    #         return render(request, "ai_analysis.html", context)
-    #
-    # >>>>>>> 911bc6c2f30fa372762d7af60653ad1d6b66a08b
     except Exception as e:
         logger.error(f"Error in api_get_ai_analysis: {str(e)}")
         return JsonResponse(
@@ -669,16 +638,6 @@ def ats_resume(request):
         response = HttpResponse(pdf_file, content_type="application/pdf")
         response["Content-Disposition"] = 'attachment; filename="ATS_Resume.pdf"'
         return response
-
-    # --- EXISTING: MARKDOWN DOWNLOAD LOGIC ---
-    if request.method == "GET" and request.GET.get("download") == "1" and ats_resume_md:
-        response = HttpResponse(
-            clean_html_response(ats_resume_md), content_type="text/plain; charset=utf-8"
-        )
-        response["Content-Disposition"] = 'attachment; filename="ATS_Resume_Source.md"'
-        return response
-
-    # --- RENDER THE PAGE ---
     show_job_form = not ats_resume_md
 
     context = {
@@ -762,27 +721,6 @@ def ats_chat_api(request):
 
         if updated_resume:
             request.session["ats_resume_md"] = updated_resume
-
-            # Update chat history
-            # <<<<<<< HEAD
-            #             chat_history = request.session.get("ats_chat_history", [])
-            #             chat_history.extend(
-            #                 [
-            #                     {"type": "user", "message": chat_message},
-            #                     {"type": "ai", "message": "Resume updated successfully!"},
-            #                 ]
-            #             )
-            #             request.session["ats_chat_history"] = chat_history
-            #
-            #             return JsonResponse(
-            #                 {
-            #                     "success": True,
-            #                     "updated_resume_html": mistune.html(updated_resume),
-            #                     "updated_resume_raw": updated_resume,
-            #                     "chat_history": chat_history,
-            #                 }
-            #             )
-            # =======
             chat_history = request.session.get("ats_chat_history", [])
             chat_history.extend(
                 [
@@ -815,4 +753,3 @@ def ats_chat_api(request):
     except Exception as e:
         logger.error(f"Error in ats_chat_api: {str(e)}")
         return JsonResponse({"error": "Internal server error"}, status=500)
-
