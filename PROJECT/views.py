@@ -576,7 +576,7 @@ def ats_resume(request):
         response['Content-Disposition'] = 'attachment; filename="ATS_Resume.md"'
         return response
     
-    # Determine if we should show the job description form
+    # Determine if we should show the job description for
     show_job_form = not ats_resume_md
     
     # Convert markdown to HTML for display
