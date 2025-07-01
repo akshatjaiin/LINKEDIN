@@ -556,7 +556,6 @@ def ats_resume(request):
             job_desc = request.POST.get("ats_job_desc", "").strip()
             if not job_desc:
                 messages.error(request, "Please enter a job description.")
-                # <<< CHANGE: Using your template name "ats_resume_md.html"
                 return render(
                     request,
                     "ats_resume_md.html",
@@ -738,7 +737,7 @@ def ats_chat_api(request):
             return JsonResponse(
                 {
                     "success": True,
-                    "updated_resume_html": mistune.html(updated_resume),
+                    "updated_resume_html": mistune.html(updated_resume_html),
                     "updated_resume_raw": updated_resume,
                     "chat_history": chat_history,
                 }

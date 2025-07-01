@@ -10,6 +10,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 40px;
+            box-sizing: border-box; /* Ensures padding doesn't add to width */
         }
         .container {
             max-width: 900px;
@@ -46,6 +47,8 @@
             cursor: pointer;
             display: inline-block;
             margin: 10px 0;
+            text-decoration: none; /* For the 'a' tag */
+            text-align: center;
         }
         .btn-3d:active {
             box-shadow: 2px 2px 0px 0px #222, 4px 4px 0px 0px #bbb;
@@ -61,9 +64,11 @@
             font-weight: bold;
             color: #222;
             margin-bottom: 8px;
+            display: block; /* Ensures label is on its own line */
         }
         .chat-input {
             width: 100%;
+            box-sizing: border-box; /* Includes padding in width */
             border-radius: 8px;
             border: 1.5px solid #bbb;
             padding: 12px;
@@ -88,11 +93,7 @@
             <textarea id="chat_message" name="chat_message" class="chat-input" rows="3" placeholder="Type your request..."></textarea>
             <button type="submit" class="btn-3d">Update Resume</button>
         </form>
-        <form method="get" action="" style="margin-top: 20px; display: flex; gap: 10px;">
+        <form method="get" action="" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
             <button type="submit" name="download" value="1" class="btn-3d">Download Resume (Markdown)</button>
-            <button type="submit" name="download_txt" value="1" class="btn-3d">Download Resume (Text)</button>
-        </form>
-        <a href="{% url 'ai_analysis' %}" class="btn-3d">&larr; Back to Analysis</a>
-    </div>
-</body>
-</html>
+            <button type="submit" name="download_pdf" value="1" class="btn-3d">Download Resume (PDF)</button>
+
