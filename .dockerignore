@@ -1,0 +1,29 @@
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Local development files
+.env
+venv/
+.venv/
+db.sqlite3
+*.pyc
+__pycache__/
+
+# Documentation and local data files that should not be in the image
+*.md
+LICENSE
+tree.txt
+*.csv
+*.json
+
+# IDE and OS files
+.idea/
+.vscode/
+*.swp
+*~
+Thumbs.db

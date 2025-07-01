@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI LinkedIn Analysis</title>
     <style>
+        /* =================================== */
+        /* == YOUR ORIGINAL CSS STYLESHEET === */
+        /* =================================== */
         * {
             margin: 0;
             padding: 0;
@@ -372,6 +375,46 @@
                 font-size: 2em;
             }
         }
+        
+        /* =================================== */
+        /* === NEW STYLES FOR ASYNC LOADING == */
+        /* =================================== */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 250px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loader-container p {
+            margin-top: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Helper class to hide sections until they are ready */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -382,152 +425,39 @@
         </div>
 
         <div class="content">
-            {% if error %}
-                <div class="error-message">
-                    <strong>Error:</strong> {{ error }}
-                </div>
-            {% endif %}
+            <div id="messages-container"></div> <!-- For dynamic success/error messages -->
 
-            {% if analysis_success %}
-                <div class="success-message">
-                    <strong>Analysis Complete!</strong> Your LinkedIn profile has been thoroughly analyzed.
-                </div>
-            {% endif %}
-
-            <!-- AI Analysis Section -->
-            {% if analysis %}
-                <div class="section">
-                    <h2 class="section-title">📊 AI Profile Analysis</h2>
-                    <div class="analysis-content">
-                        {{ analysis|safe }}
+            <!-- AI Analysis Section: Starts with a loader -->
+            <div class="section" id="analysis-section">
+                <h2 class="section-title">📊 AI Profile Analysis</h2>
+                <div id="analysis-container">
+                    <div class="loader-container">
+                        <div class="loader"></div>
+                        <p>Generating your AI-powered profile analysis... this may take a moment.</p>
                     </div>
                 </div>
-            {% endif %}
-
-            <!-- Job Recommendations Metrics -->
-            {% if job_recommendations %}
-                <div class="section">
-                    <h2 class="section-title">🎯 Career Recommendations</h2>
-                    
-                    <div class="metrics-grid">
-                        <div class="metric-card">
-                            <div class="metric-value">{{ job_recommendations.ATS_SCORE|default:"N/A" }}</div>
-                            <div class="metric-label">ATS Score</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value">{{ job_recommendations.JOB_TITLES|length|default:"0" }}</div>
-                            <div class="metric-label">Recommended Roles</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value">{{ job_recommendations.RELATED_DOMAINS|length|default:"0" }}</div>
-                            <div class="metric-label">Related Domains</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value">{{ jobs_data|length|default:"0" }}</div>
-                            <div class="metric-label">Available Jobs</div>
-                        </div>
-                    </div>
-
-                    <div class="recommendations-grid">
-                        {% if job_recommendations.JOB_TITLES %}
-                            <div class="recommendation-card">
-                                <h3>🎯 Recommended Job Titles</h3>
-                                <ul>
-                                    {% for title in job_recommendations.JOB_TITLES %}
-                                        <li>{{ title }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
-
-                        {% if job_recommendations.LOCATIONS %}
-                            <div class="recommendation-card">
-                                <h3>📍 Suggested Locations</h3>
-                                <ul>
-                                    {% for location in job_recommendations.LOCATIONS %}
-                                        <li>{{ location }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
-
-                        {% if job_recommendations.RELATED_DOMAINS %}
-                            <div class="recommendation-card">
-                                <h3>🌐 Related Domains</h3>
-                                {% for domain in job_recommendations.RELATED_DOMAINS %}
-                                    <p><strong>{{ domain.domain }}</strong> ({{ domain.relevance_score }}% match)</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-
-                        {% if job_recommendations.RECOMMENDATIONS %}
-                            <div class="recommendation-card">
-                                <h3>💡 Key Recommendations</h3>
-                                <ul>
-                                    {% for rec in job_recommendations.RECOMMENDATIONS %}
-                                        <li>{{ rec }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    {% if job_recommendations.SKILLS_TO_DEVELOP %}
-                        <div style="margin-top: 30px;">
-                            <h3>🚀 Skills to Develop</h3>
-                            <div class="skills-to-develop">
-                                {% for skill in job_recommendations.SKILLS_TO_DEVELOP %}
-                                    <span class="skill-tag">{{ skill }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
+            </div>
+            
+            <!-- Career Recommendations Section: Hidden by default -->
+            <div class="section hidden" id="recommendations-section">
+                <h2 class="section-title">🎯 Career Recommendations</h2>
+                <div id="recommendations-container">
+                    <!-- Content will be injected here by JavaScript -->
                 </div>
-            {% endif %}
+            </div>
 
-            <!-- Job Listings Section -->
-            {% if jobs_data %}
-                <div class="section">
-                    <h2 class="section-title">💼 Available Job Opportunities</h2>
-                    <div class="jobs-section">
-                        <p style="text-align: center; margin-bottom: 20px; color: #7f8c8d;">
-                            Found {{ jobs_data|length }} relevant job opportunities for you
-                        </p>
-                        
-                        <div class="jobs-grid">
-                            {% for job in jobs_data %}
-                                <div class="job-card">
-                                    <div class="job-title">{{ job.title|default:"Job Title Not Available" }}</div>
-                                    <div class="job-company">{{ job.company|default:"Company Not Listed" }}</div>
-                                    <div class="job-location">📍 {{ job.location|default:"Location Not Specified" }}</div>
-                                    <div class="job-site">🌐 {{ job.site|default:"Site Unknown" }}</div>
-                                    <div class="job-date">🗓️ {{ job.date_posted|default:"Date Unknown" }}</div>
-                                    {% if job.min_amount or job.max_amount %}
-                                        <div class="job-salary">
-                                            💰
-                                            {% if job.min_amount and job.max_amount %}
-                                                {{ job.min_amount|floatformat:0 }} - {{ job.max_amount|floatformat:0 }} {{ job.currency|default:"" }}
-                                            {% elif job.min_amount %}
-                                                From {{ job.min_amount|floatformat:0 }} {{ job.currency|default:"" }}
-                                            {% elif job.max_amount %}
-                                                Up to {{ job.max_amount|floatformat:0 }} {{ job.currency|default:"" }}
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if job.description %}
-                                        <div class="job-summary">{{ job.description|truncatewords:30 }}</div>
-                                    {% endif %}
-                                    {% if job.job_url %}
-                                        <a href="{{ job.job_url }}" target="_blank" class="job-link">View Job Details</a>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                        </div>
+            <!-- Job Listings Section: Starts with a loader -->
+            <div class="section" id="jobs-section">
+                <h2 class="section-title">💼 Available Job Opportunities</h2>
+                 <div id="jobs-container">
+                    <div class="loader-container">
+                        <div class="loader"></div>
+                        <p>Searching for relevant job opportunities based on your profile...</p>
                     </div>
                 </div>
-            {% endif %}
-
-            <!-- ATS Resume Form -->
+            </div>
+            
+            <!-- ATS Resume Form: Static, always visible -->
             <form method="post" action="{% url 'ats_resume' %}" class="ats-form" style="margin: 40px auto 0; max-width: 600px; background: #f8f9fa; border-radius: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 32px; display: flex; flex-direction: column; align-items: stretch;">
                 {% csrf_token %}
                 <label for="ats_job_desc" style="font-weight: bold; color: #222; margin-bottom: 12px; font-size: 1.1em;">Paste Job Description for ATS Resume:</label>
@@ -535,17 +465,17 @@
                 <button type="submit" class="btn-3d">Generate ATS Resume</button>
             </form>
 
-            <!-- ATS Resume Display -->
-            {% if ats_resume_html %}
-                <div class="section">
-                    <h2 class="section-title">📄 ATS Resume</h2>
-                    <div class="analysis-content">
-                        {{ ats_resume_html|safe }}
-                    </div>
-                </div>
-            {% else %}
-                <p style="color:#888;">No resume generated yet.</p>
-            {% endif %}
+            <!-- <!-- ATS Resume Display --> -->
+            <!-- {% if ats_resume_html %} -->
+            <!--     <div class="section"> -->
+            <!--         <h2 class="section-title">📄 ATS Resume</h2> -->
+            <!--         <div class="analysis-content"> -->
+            <!--             {{ ats_resume_html|safe }} -->
+            <!--         </div> -->
+            <!--     </div> -->
+            <!-- {% else %} -->
+            <!--     <p style="color:#888;">No resume generated yet.</p> -->
+            <!-- {% endif %} -->
 
             <!-- Action Buttons -->
             <div class="action-buttons">
@@ -555,5 +485,175 @@
             </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get references to all the containers we need to manipulate
+        const analysisContainer = document.getElementById('analysis-container');
+        const recommendationsSection = document.getElementById('recommendations-section');
+        const recommendationsContainer = document.getElementById('recommendations-container');
+        const jobsContainer = document.getElementById('jobs-container');
+        const messagesContainer = document.getElementById('messages-container');
+
+        // Helper function to display messages
+        function showMessage(type, text) {
+            const messageClass = type === 'error' ? 'error-message' : 'success-message';
+            const title = type === 'error' ? 'Error' : 'Analysis Complete!';
+            messagesContainer.innerHTML = `<div class="${messageClass}"><strong>${title}</strong> ${text}</div>`;
+        }
+
+        fetch("{% url 'api_get_ai_analysis' %}")
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error || `Server responded with status: ${response.status}`) });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) { throw new Error(data.error); }
+
+                // Populate AI Analysis section
+                analysisContainer.innerHTML = `<div class="analysis-content">${data.analysis_html}</div>`;
+                if (data.analysis_success_message) {
+                    showMessage('success', 'Your LinkedIn profile has been thoroughly analyzed.');
+                }
+
+                // If recommendations are available, populate that section and trigger job search
+                const recs = data.job_recommendations;
+                if (recs && Object.keys(recs).length > 0) {
+                    populateRecommendations(recs);
+                    recommendationsSection.classList.remove('hidden');
+                    fetchJobs(); // Now we can fetch jobs
+                } else {
+                    jobsContainer.innerHTML = `<div class="error-message">Could not generate job recommendations, so no jobs could be fetched.</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching AI analysis:', error);
+                const errorMessage = `Failed to generate analysis. ${error.message}. Please try again later.`;
+                analysisContainer.innerHTML = `<div class="error-message"><strong>Analysis Failed:</strong> ${errorMessage}</div>`;
+                jobsContainer.innerHTML = `<div class="error-message">Job search could not be performed due to an error in the analysis step.</div>`;
+            });
+
+        // --- Helper Function to build and inject the Recommendations HTML ---
+        function populateRecommendations(recs) {
+            let metricsHTML = `
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">${recs.ATS_SCORE || 'N/A'}</div>
+                        <div class="metric-label">ATS Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${recs.JOB_TITLES?.length || 0}</div>
+                        <div class="metric-label">Recommended Roles</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${recs.RELATED_DOMAINS?.length || 0}</div>
+                        <div class="metric-label">Related Domains</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="available-jobs-count">...</div>
+                        <div class="metric-label">Available Jobs</div>
+                    </div>
+                </div>`;
+
+            let cardsHTML = `<div class="recommendations-grid">`;
+            if (recs.JOB_TITLES?.length) {
+                cardsHTML += `<div class="recommendation-card"><h3>🎯 Recommended Job Titles</h3><ul>${recs.JOB_TITLES.map(t => `<li>${t}</li>`).join('')}</ul></div>`;
+            }
+            if (recs.LOCATIONS?.length) {
+                cardsHTML += `<div class="recommendation-card"><h3>📍 Suggested Locations</h3><ul>${recs.LOCATIONS.map(l => `<li>${l}</li>`).join('')}</ul></div>`;
+            }
+            if (recs.RELATED_DOMAINS?.length) {
+                cardsHTML += `<div class="recommendation-card"><h3>🌐 Related Domains</h3>${recs.RELATED_DOMAINS.map(d => `<p><strong>${d.domain}</strong> (${d.relevance_score}% match)</p>`).join('')}</div>`;
+            }
+            if (recs.RECOMMENDATIONS?.length) {
+                cardsHTML += `<div class="recommendation-card"><h3>💡 Key Recommendations</h3><ul>${recs.RECOMMENDATIONS.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
+            }
+            cardsHTML += `</div>`;
+
+            let skillsHTML = '';
+            if (recs.SKILLS_TO_DEVELOP?.length) {
+                skillsHTML = `
+                    <div style="margin-top: 30px;">
+                        <h3>🚀 Skills to Develop</h3>
+                        <div class="skills-to-develop">
+                            ${recs.SKILLS_TO_DEVELOP.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+                        </div>
+                    </div>`;
+            }
+
+            recommendationsContainer.innerHTML = metricsHTML + cardsHTML + skillsHTML;
+        }
+
+        // --- STEP 2: Fetch Job Listings (called after analysis is complete) ---
+        function fetchJobs() {
+            fetch("{% url 'api_get_job_listings' %}")
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.error || `Server responded with status: ${response.status}`) });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) { throw new Error(data.error); }
+                    
+                    const jobCountEl = document.getElementById('available-jobs-count');
+                    if (jobCountEl) jobCountEl.textContent = data.count || 0;
+
+                    if (data.jobs && data.jobs.length > 0) {
+                        populateJobs(data.jobs);
+                    } else {
+                        jobsContainer.innerHTML = `<div class="jobs-section" style="text-align:center;"><p>No matching job opportunities found at this time. Try broadening your skills or checking back later!</p></div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching jobs:', error);
+                    jobsContainer.innerHTML = `<div class="error-message"><strong>Job Search Failed:</strong> ${error.message}</div>`;
+                    const jobCountEl = document.getElementById('available-jobs-count');
+                    if (jobCountEl) jobCountEl.textContent = '0';
+                });
+        }
+        
+        // --- Helper Function to build and inject the Job Listings HTML ---
+        function populateJobs(jobs) {
+            const jobsGrid = jobs.map(job => {
+                const salary = job.min_amount || job.max_amount ? `
+                    <div class="job-salary">
+                        💰 
+                        ${job.min_amount && job.max_amount ? `${Math.round(job.min_amount)} - ${Math.round(job.max_amount)} ${job.currency || ''}` :
+                          job.min_amount ? `From ${Math.round(job.min_amount)} ${job.currency || ''}` :
+                          `Up to ${Math.round(job.max_amount)} ${job.currency || ''}`}
+                    </div>` : '';
+
+                let summary = '';
+                if (job.description) {
+                    const words = job.description.split(' ');
+                    summary = words.slice(0, 30).join(' ') + (words.length > 30 ? '...' : '');
+                }
+
+                return `
+                    <div class="job-card">
+                        <div class="job-title">${job.title || "Job Title Not Available"}</div>
+                        <div class="job-company">${job.company || "Company Not Listed"}</div>
+                        <div class="job-location">📍 ${job.location || "Location Not Specified"}</div>
+                        <div class="job-site">🌐 ${job.site || "Site Unknown"}</div>
+                        <div class="job-date">🗓️ ${job.date_posted || "Date Unknown"}</div>
+                        ${salary}
+                        ${summary ? `<div class="job-summary">${summary}</div>` : ''}
+                        ${job.job_url ? `<a href="${job.job_url}" target="_blank" class="job-link">View Job Details</a>` : ''}
+                    </div>`;
+            }).join('');
+
+            jobsContainer.innerHTML = `
+                <div class="jobs-section">
+                    <p style="text-align: center; margin-bottom: 20px; color: #7f8c8d;">
+                        Found ${jobs.length} relevant job opportunities for you
+                    </p>
+                    <div class="jobs-grid">${jobsGrid}</div>
+                </div>`;
+        }
+    });
+    </script>
 </body>
 </html>
